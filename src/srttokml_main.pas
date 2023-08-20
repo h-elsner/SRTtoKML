@@ -38,7 +38,8 @@ Format SRT file from DJI Mini3 (example; data set per frame):
 ================================================================================
 History
 2023-08-19 Idea and plan, GUI
-2023-08-20 First version
+2023-08-20 V0.1 First version
+2023-08-20 V0.2 Extrude selectable
 *)
 
 unit SRTtoKML_main;
@@ -69,6 +70,7 @@ type
     btnConvert: TBitBtn;
     btnClose: TBitBtn;
     btnSave: TBitBtn;
+    cbExtrude: TCheckBox;
     ImageList1: TImageList;
     Memo1: TMemo;
     Memo2: TMemo;
@@ -88,6 +90,7 @@ type
   end;
 
 const
+  vers='0.2 (08/2023)';
   latID='latitude: ';
   lonID='longitude: ';
   altID='abs_alt: ';
@@ -213,9 +216,14 @@ var
   kmllist, coolist: TStringList;
   i: integer;
   dp: fpoint;
+  ex: char;
 
 begin
   if OpenDialog1.Execute then begin
+    if cbExtrude.Checked then
+      ex:='1'
+    else
+      ex:='0';
     kmllist:=TStringList.Create;
     coolist:=TStringList.Create;
     Screen.Cursor:=crHourGlass;
@@ -240,7 +248,7 @@ begin
           kmllist.Add(tab2+'<styleUrl>#Flightpath</styleUrl>');
           kmllist.Add(tab2+'<gx:Track>');
           kmllist.Add(tab4+'<altitudeMode>absolute</altitudeMode>');
-          kmllist.Add(tab4+'<extrude>1</extrude>');
+          kmllist.Add(tab4+'<extrude>'+ex+'</extrude>');
 
           ClearFPoint(dp);
           for i:=0 to Memo1.Lines.Count-1 do begin
@@ -287,7 +295,7 @@ end;
 procedure TForm1.btnCloseClick(Sender: TObject);
 begin
   if btnSave.Enabled then begin
-    if MessageDlg(capDialog, errSave, mtConfirmation, [mbYes, mbNo],0) = mrYes then
+    if MessageDlg(capDialog, errSave, mtConfirmation, [mbNo, mbYes],0) = mrYes then
       Close;
   end else
     Close;
@@ -295,13 +303,14 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  caption:=appName;
+  caption:=appName+vers;
   btnConvert.Caption:=capConvert;
   btnConvert.Hint:=hntConvert;
   btnClose.Caption:=capClose;
   btnClose.Hint:=hntClose;
   btnSave.Caption:=capSave;
   btnSave.Hint:=hntSave;
+  cbExtrude.Hint:=hntExtrude;
   OpenDialog1.Title:=titOpen;
   SaveDialog1.Title:=titSave;
   Memo1.Text:=hntConvert;
