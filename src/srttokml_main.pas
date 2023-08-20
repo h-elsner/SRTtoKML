@@ -97,14 +97,11 @@ const
   tab2='  ';
   tab4='    ';
 
-  xmlvers='<?xml version="1.0" encoding="UTF-8"?>';  {ID XML/GPX header}
+  xmlvers='<?xml version="1.0" encoding="UTF-8"?>';      {ID XML/GPX header}
   kmlvers='<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">';
   pmtag='Placemark>';
   doctag='Document>';
-  starticon='https://maps.google.com/mapfiles/dir_0.png';       {blau}
-  stopicon= 'https://maps.google.com/mapfiles/dir_walk_60.png'; {grau}
   aircrafticon='https://earth.google.com/images/kml-icons/track-directional/track-0.png';
-
   ColorTrack=clYellow;
   ColorWaypoints=clRed;
   WidthTrack='2';
@@ -143,12 +140,12 @@ begin
   klist.Add('<'+doctag);
   klist.Add(write_nme('SRTtoKML'));
   klist.Add(write_des(dt+' - '+ExtractFileName(f)));
-  klist.Add(tab2+'<Style id="Flightpath">');
+  klist.Add('<Style id="Flightpath">');
   klist.Add(tab2+'<LineStyle>');
-  klist.Add(tab4+'<color>'+ColorToKMLColor(ColorTrack)+'</color>');  {Farbe der Linie}
+  klist.Add(tab4+'<color>'+ColorToKMLColor(ColorTrack)+'</color>');  {Color for track}
   klist.Add(tab4+'<width>'+WidthTrack+'</width>');
   klist.Add(tab2+'</LineStyle>');
-  klist.Add(tab2+'<PolyStyle><color>'+ColorToKMLColor(ColorWaypoints)+'</color></PolyStyle>');  {for Waypoints}
+  klist.Add(tab2+'<PolyStyle><color>'+ColorToKMLColor(ColorWaypoints)+'</color></PolyStyle>');  {Color for Waypoints}
   klist.Add(tab2+'<IconStyle><Icon><href>'+aircrafticon+'</href></Icon></IconStyle>');
   klist.Add('</Style>');
 end;
@@ -171,7 +168,7 @@ begin
     p.v:=true;
 end;
 
-procedure GetFPoint(s: string; var p: fpoint);
+function GetFPoint(s: string; var p: fpoint): boolean;
 var
   sellist: TStringList;
   i: integer;
@@ -181,11 +178,13 @@ begin
   sellist:=TStringList.Create;
   sellist.Delimiter:=selpar;
   sellist.StrictDelimiter:=true;
+  result:=false;
   re:=TRegExpr.Create('[0-9]{4}-[0-9]{2}-[0-9]{2}');
   try
     if re.Exec(s) then begin                             {Get time}
       p.date:=s.Split([tab1])[0];
       p.time:=s.Split([tab1])[1];
+      result:=true;
     end else begin
       if pos(selpar, s)>0 then begin                     {Get lat, lon, alt}
         sellist.DelimitedText:=s;
@@ -198,6 +197,7 @@ begin
           end;
           if pos(altID, sellist[i])>0 then begin
             p.alt:=sellist[i].Split([selval])[2];        {abs_alt on second position}
+            result:=true;
           end;
         end;
       end;
@@ -226,7 +226,8 @@ begin
       Memo1.Lines.LoadFromFile(OpenDialog1.FileName);    {Load SRT file}
       if Memo1.Lines.Count>100 then begin
         for i:=1 to 10 do begin                          {Get start point and first data set}
-          GetFPoint(Memo1.Lines[i], dp);
+          if not GetFPoint(Memo1.Lines[i], dp) then
+            continue;
           ValidateFPoint(dp);
           if dp.v then
             break;
@@ -248,7 +249,7 @@ begin
             if dp.v then begin
               coolist.Add(tab4+'<gx:coord>'+dp.lon+tab1+dp.lat+tab1+dp.alt+'</gx:coord>');
               kmllist.Add(tab4+'<when>'+dp.date+'T'+dp.time+'Z</when>');
-              ClearFPoint(dp);
+              dp.v:=false;
             end;
           end;
 
