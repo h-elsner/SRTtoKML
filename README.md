@@ -1,5 +1,6 @@
 # SRTtoKML
 Select a subtitle file with telemetry data from DJI Mini 3 and convert it to a KML file to use it on GoogleEarth.
+
 ![Screenshot](Screenshot.png)
 
 DJI Mini 3 creates a subtitle file (*.SRT) for each video. This file contains telemetry data with coordinates and altitude.
