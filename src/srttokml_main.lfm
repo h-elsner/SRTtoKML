@@ -12,7 +12,7 @@ object Form1: TForm1
   Position = poDefaultPosOnly
   SessionProperties = 'Height;Memo1.Width;OpenDialog1.FileName;OpenDialog1.InitialDir;Width;WindowState;cbExtrude.Checked'
   ShowHint = True
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '2.2.4.0'
   object panTop: TPanel
     Left = 0
     Height = 64
@@ -58,9 +58,9 @@ object Form1: TForm1
     end
     object cbExtrude: TCheckBox
       Left = 368
-      Height = 23
+      Height = 21
       Top = 24
-      Width = 74
+      Width = 66
       Caption = 'Extrude'
       Checked = True
       State = cbChecked

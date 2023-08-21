@@ -104,10 +104,13 @@ const
   kmlvers='<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">';
   pmtag='Placemark>';
   doctag='Document>';
+
+  {How flight trck looks like}
   aircrafticon='https://earth.google.com/images/kml-icons/track-directional/track-0.png';
   ColorTrack=clYellow;
   ColorWaypoints=clRed;
   WidthTrack='2';
+  FlightPathName='Drone';
 
 var
   Form1: TForm1;
@@ -116,8 +119,8 @@ implementation
 
 {$R *.lfm}
 
-{$I SRTtoKML_de.inc}                                     {German GUI}
-{.$I SRTtoKML_en.inc}                                    {English GUI}
+{ $I SRTtoKML_de.inc}                                     {German GUI}
+{$I SRTtoKML_en.inc}                                    {English GUI}
 
 { TForm1 }
 
@@ -243,11 +246,11 @@ begin
         if dp.v then begin
           KMLheader(ChangeFileExt(OpenDialog1.FileName, ''), dp.date, kmllist);
           kmllist.Add('<'+pmtag);
-          kmllist.Add(write_nme('Drone'));
+          kmllist.Add(write_nme(FlightPathName));
           kmllist.Add(write_des(ExtractFileName(OpenDialog1.FileName)));
           kmllist.Add(tab2+'<styleUrl>#Flightpath</styleUrl>');
           kmllist.Add(tab2+'<gx:Track>');
-          kmllist.Add(tab4+'<altitudeMode>absolute</altitudeMode>');
+          kmllist.Add(tab4+'<altitudeMode>absolute</altitudeMode>');  {This is fix, no choice}
           kmllist.Add(tab4+'<extrude>'+ex+'</extrude>');
 
           ClearFPoint(dp);
