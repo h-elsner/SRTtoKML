@@ -119,8 +119,8 @@ implementation
 
 {$R *.lfm}
 
-{ $I SRTtoKML_de.inc}                                     {German GUI}
-{$I SRTtoKML_en.inc}                                    {English GUI}
+{$I SRTtoKML_de.inc}                                     {German GUI}
+{ $I SRTtoKML_en.inc}                                    {English GUI}
 
 { TForm1 }
 
@@ -192,17 +192,17 @@ begin
       p.time:=s.Split([tab1])[1];
       result:=true;
     end else begin
+      sellist.DelimitedText:=s;
       if pos(selpar, s)>0 then begin                     {Get lat, lon, alt}
-        sellist.DelimitedText:=s;
         for i:=0 to sellist.Count-1 do begin
           if pos(latID, sellist[i])>0 then begin
-            p.lat:=sellist[i].Split([selval])[1];
+            p.lat:=trim(sellist[i].Split([selval])[1]);
           end;
           if pos(lonID, sellist[i])>0 then begin
-            p.lon:=sellist[i].Split([selval])[1];
+            p.lon:=trim(sellist[i].Split([selval])[1]);
           end;
           if pos(altID, sellist[i])>0 then begin
-            p.alt:=sellist[i].Split([selval])[2];        {abs_alt on second position}
+            p.alt:=trim(sellist[i].Split([selval])[1]);  {abs_alt on second position}
             result:=true;
           end;
         end;
