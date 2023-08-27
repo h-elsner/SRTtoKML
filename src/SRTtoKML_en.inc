@@ -7,6 +7,8 @@ hntConvert='Select a subtitle file with telemetry data and convert it to a KML f
 capSave='&Save';
 hntSave='Save flight track from telemetry data as KML file';
 hntExtrude='Extend the linestring all the way to the ground';
+capMode='Output format';
+hntMode='Select output format';
 errSave='Do you really want to close without save?';
 
 titOpen='Open subtitle file with telemetry data...';

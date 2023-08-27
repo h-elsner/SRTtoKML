@@ -7,6 +7,8 @@ hntConvert='Eine Untertiteldatei mit Telemetriedaten auswählen und in KML zum A
 capSave='&Speichern';
 hntSave='Flugbahn aus Telemetrie als KML speichern';
 hntExtrude='Extrude zeichnet senkrechte Höhenlinien';
+capMode='Ausgabeformat';
+hntMode='Ausgabeformat wählen';
 errSave='Willst du wirklich ohne zu speichern beenden?';
 
 titOpen='Eine Untertiteldatei mit Telemetriedaten öffnen...';
