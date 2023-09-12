@@ -51,7 +51,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Buttons, XMLPropStorage, RegExpr;
+  StdCtrls, Buttons, XMLPropStorage, RegExpr, LazFileUtils;
 
 type
   fpoint=record
@@ -128,8 +128,8 @@ implementation
 
 {$R *.lfm}
 
-{ $I SRTtoKML_de.inc}                                     {German GUI}
-{$I SRTtoKML_en.inc}                                    {English GUI}
+{$I SRTtoKML_de.inc}                                     {German GUI}
+{ $I SRTtoKML_en.inc}                                    {English GUI}
 
 { TForm1 }
 
@@ -231,8 +231,10 @@ end;
 
 procedure TForm1.FormDropFiles(Sender: TObject; const FileNames: array of string);
 begin
-  if FileExists(FileNames[0]) then
+  if FileExists(FileNames[0]) and FileNameExtIs(FileNames[0], 'SRT', false) then begin
+    Application.BringToFront;                            {Important for all file drops}
     DoWithFile(FileNames[0]);
+  end;
 end;
 
 procedure TForm1.DoWithFile(const fn: string);
